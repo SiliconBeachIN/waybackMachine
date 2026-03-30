@@ -1,15 +1,88 @@
-:root{--bg:#f6f8fb;--card:#ffffff;--accent:#0366d6;--muted:#666}
+:root{
+	--bg: #f6f8fb;
+	--card: #ffffff;
+	--accent: #0366d6;
+	--accent-2: #024ea8;
+	--muted: #666666;
+	--text: #0b1728;
+	--radius: 10px;
+	--shadow: 0 8px 24px rgba(11,22,40,.06);
+	--gap: 16px;
+}
+
 *{box-sizing:border-box}
-body{font-family:Inter,Segoe UI,Arial;background:var(--bg);color:#111;margin:0;padding:24px}
-.container{max-width:720px;margin:24px auto;padding:24px;background:var(--card);border-radius:8px;box-shadow:0 6px 18px rgba(11,22,40,.06)}
-h1{margin-top:0;font-size:1.4rem}
-form{display:grid;gap:12px}
-label{font-weight:600;font-size:.9rem}
-input[type=text]{padding:10px;border:1px solid #ddd;border-radius:6px;font-size:1rem}
+
+html,body{height:100%}
+body{
+	font-family: Inter, "Segoe UI", Arial, sans-serif;
+	background: var(--bg);
+	color: var(--text);
+	margin: 0;
+	padding: 24px;
+	-webkit-font-smoothing:antialiased;
+}
+
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+
+.site-header{position:sticky;top:0;z-index:20;background:transparent;padding:12px 0}
+.site-header .wrap{display:flex;align-items:center;gap:12px}
+.brand{font-weight:700;color:var(--accent);text-decoration:none;font-size:1.05rem}
+.brand svg{vertical-align:middle;margin-right:8px;border-radius:6px}
+.brand-text{vertical-align:middle;margin-left:6px}
+.menu-btn{margin-left:auto;background:transparent;border:1px solid transparent;padding:8px 10px;border-radius:8px;font-size:1.05rem;cursor:pointer}
+.menu-btn:focus{outline:2px solid rgba(3,102,214,.18);outline-offset:3px}
+
+.site-nav ul{list-style:none;margin:0;padding:8px 0;display:flex;gap:12px}
+.site-nav a{color:var(--text);text-decoration:none;padding:8px 12px;border-radius:8px}
+.site-nav a:hover{background:rgba(3,102,214,.06);color:var(--accent-2)}
+
+.container{max-width:720px;margin:24px auto;padding:24px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow)}
+h1{margin-top:0;font-size:1.6rem}
+.lead{margin-top:4px;color:var(--muted);font-size:0.98rem}
+
+.lookup{display:grid;gap:12px;margin-top:12px}
+.field label{display:block;font-weight:600;font-size:.9rem;margin-bottom:6px}
+input[type=text],input[type=url]{width:100%;padding:12px;border:1px solid #e6eefb;border-radius:8px;font-size:1rem;background:#fff;transition:box-shadow .12s,transform .12s}
+input[type=text]:focus,input[type=url]:focus{box-shadow:0 6px 18px rgba(3,102,214,.08);border-color:var(--accent);outline:none}
+
 .actions{display:flex;justify-content:flex-end}
-button{background:var(--accent);color:#fff;padding:10px 16px;border:none;border-radius:6px;cursor:pointer}
+button{background:var(--accent);color:#fff;padding:10px 16px;border:none;border-radius:8px;cursor:pointer;transition:transform .08s,box-shadow .08s}
+button:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(3,102,214,.12)}
+button:focus{outline:3px solid rgba(3,102,214,.15);outline-offset:3px}
 button:disabled{opacity:.6;cursor:not-allowed}
-#result{margin-top:18px;padding:12px;border-radius:6px;background:#fbfdff;border:1px solid #eef4ff}
+
+.result{margin-top:18px;padding:16px;border-radius:8px;background:#fbfdff;border:1px solid #eef4ff}
 .snapshot{display:flex;flex-direction:column;gap:6px}
-.muted{color:var(--muted);font-size:.9rem}
+.snapshot a{color:var(--accent);word-break:break-all}
+.muted{color:var(--muted);font-size:.95rem}
 .note{margin-top:12px;font-size:.85rem;color:var(--muted)}
+
+/* Button spinner */
+.btn-spinner{display:inline-block;width:14px;height:14px;margin-left:10px;border-radius:50%;border:2px solid rgba(255,255,255,.18);border-top-color:#fff;opacity:0;transform:scale(.8);transition:opacity .12s,transform .12s}
+button.loading .btn-spinner{opacity:1;transform:scale(1);animation:spin .9s linear infinite}
+button.loading .btn-text{opacity:.9}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Result card animation */
+.result .card-enter{opacity:0;transform:translateY(6px)}
+.result .card-enter.show{opacity:1;transform:none;transition:all .28s cubic-bezier(.2,.9,.22,1)}
+
+/* Accent header gradient */
+.site-header{background:linear-gradient(90deg, rgba(3,102,214,0.06), rgba(4,145,255,0.04));backdrop-filter:blur(6px)}
+
+/* Slightly larger, punchier CTA on wide screens */
+@media (min-width:900px){
+	button{padding:12px 20px;font-size:1.02rem}
+}
+
+/* Responsive */
+@media (min-width:720px){
+	.snapshot{flex-direction:row;justify-content:space-between;align-items:center}
+	.site-nav[hidden]{display:block}
+	.menu-btn{display:none}
+}
+
+@media (max-width:719px){
+	.site-nav{position:absolute;right:20px;top:56px;background:var(--card);border-radius:8px;box-shadow:var(--shadow);padding:8px}
+	.site-nav ul{flex-direction:column}
+}
