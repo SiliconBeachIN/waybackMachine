@@ -2,11 +2,23 @@ const form = document.getElementById('lookup-form');
 const urlInput = document.getElementById('url');
 const tsInput = document.getElementById('timestamp');
 const result = document.getElementById('result');
+const menuBtn = document.querySelector('.menu-btn');
+const siteNav = document.getElementById('site-nav');
 
 function setLoading(isLoading){
   const btn = form.querySelector('button');
+  const btnText = btn.querySelector('.btn-text');
   btn.disabled = isLoading;
-  btn.textContent = isLoading ? 'Checking…' : 'Check Wayback';
+  // disable inputs while loading
+  urlInput.disabled = isLoading;
+  tsInput.disabled = isLoading;
+  if(isLoading){
+    btn.classList.add('loading');
+    if(btnText) btnText.textContent = 'Checking…';
+  }else{
+    btn.classList.remove('loading');
+    if(btnText) btnText.textContent = 'Check Wayback';
+  }
 }
 
 function renderMessage(html){
@@ -27,7 +39,7 @@ async function queryWayback(targetUrl, timestamp){
 function renderResult(data, targetUrl, timestamp){
   const snaps = data && data.archived_snapshots && data.archived_snapshots.closest;
   if(!snaps){
-    renderMessage(`<div class="muted">No archived snapshot available for <strong>${escapeHtml(targetUrl)}</strong>.</div>`);
+    renderMessage(`<div class="card-enter"><div class="muted">No archived snapshot available for <strong>${escapeHtml(targetUrl)}</strong>.</div></div>`);
     return;
   }
 
@@ -42,11 +54,18 @@ function renderResult(data, targetUrl, timestamp){
   const status = snaps.status || '';
 
   renderMessage(`
-    <div class="snapshot">
-      <div><strong>Snapshot:</strong> <a href="${link}" target="_blank" rel="noopener noreferrer">${link}</a></div>
-      <div class="muted">Timestamp: ${stamp} &nbsp; • &nbsp; HTTP status: ${status}</div>
+    <div class="card-enter">
+      <div class="snapshot">
+        <div><strong>Snapshot:</strong> <a href="${link}" target="_blank" rel="noopener noreferrer">${link}</a></div>
+        <div class="muted">Timestamp: ${stamp} &nbsp; • &nbsp; HTTP status: ${status}</div>
+      </div>
     </div>
   `);
+  // animate entrance
+  requestAnimationFrame(()=>{
+    const el = result.querySelector('.card-enter');
+    if(el) el.classList.add('show');
+  });
 }
 
 function escapeHtml(s){
@@ -74,3 +93,18 @@ form.addEventListener('submit', async (ev) =>{
 // allow Enter on inputs
 urlInput.addEventListener('keydown', e => { if(e.key === 'Enter') form.requestSubmit(); });
 tsInput.addEventListener('keydown', e => { if(e.key === 'Enter') form.requestSubmit(); });
+
+// Mobile nav toggle
+if(menuBtn && siteNav){
+  menuBtn.addEventListener('click', () => {
+    const expanded = menuBtn.getAttribute('aria-expanded') === 'true';
+    menuBtn.setAttribute('aria-expanded', String(!expanded));
+    if(siteNav.hasAttribute('hidden')) siteNav.removeAttribute('hidden');
+    else siteNav.setAttribute('hidden', '');
+  });
+}
+
+// Focus URL input on load for faster use
+window.addEventListener('DOMContentLoaded', () => {
+  if(urlInput && typeof urlInput.focus === 'function') urlInput.focus();
+});

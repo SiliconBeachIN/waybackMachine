@@ -1,28 +1,55 @@
 <!doctype html>
 <html lang="en">
-  <head>
+    <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Wayback Availability Checker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="#">
+          <!-- simple mark -->
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#0366d6"/><path d="M7 12l3 3 7-7" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="brand-text">Wayback Checker</span>
+        </a>
+        <button class="menu-btn" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation">☰</button>
+        <nav id="site-nav" class="site-nav" hidden>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#result">Results</a></li>
+            <li><a href="https://archive.org" target="_blank" rel="noopener">Internet Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
     <main class="container">
       <h1>Wayback Availability Checker</h1>
+      <p class="lead">Quickly check whether the Internet Archive has a snapshot for any URL.</p>
 
-      <form id="lookup-form">
-        <label for="url">URL</label>
-        <input id="url" name="url" type="text" placeholder="https://example.com" required>
+      <form id="lookup-form" class="lookup">
+        <div class="field">
+          <label for="url">URL</label>
+          <input id="url" name="url" type="url" placeholder="https://example.com" required>
+        </div>
 
-        <label for="timestamp">Timestamp (optional)</label>
-        <input id="timestamp" name="timestamp" type="text" placeholder="YYYYMMDDhhmmss">
+        <div class="field">
+          <label for="timestamp">Timestamp (optional)</label>
+          <input id="timestamp" name="timestamp" type="text" placeholder="YYYYMMDDhhmmss">
+        </div>
 
         <div class="actions">
-          <button id="check" type="submit">Check Wayback</button>
+          <button id="check" type="submit">
+            <span class="btn-text">Check Wayback</span>
+            <span class="btn-spinner" aria-hidden="true"></span>
+          </button>
         </div>
       </form>
 
-      <section id="result" aria-live="polite"></section>
+      <section id="result" aria-live="polite" class="result"></section>
       <footer class="note">Powered by the Internet Archive Wayback Availability API</footer>
     </main>
 
